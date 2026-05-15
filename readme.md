@@ -9,11 +9,12 @@
 
 - Lenguaje de programación: Python
     - Procesamiento de imagenes:
-        - xdxdxdxd
+        - opencv-python 4.13.0.92
+        - numpy 2.2.6
     - Web app:
         - xdxdxdxd
 - Microcontrolador: ESP32
 - Cámara : DroidCam
 
 ---
-<div align = 'center'><image src = './resources/images/oveja.jpg' align = 'center' width = 250 height = 250></div>
+<div align = 'center'><image src = './source/web/images/oveja.jpg' align = 'center' width = 250 height = 250></div>
