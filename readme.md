@@ -16,4 +16,4 @@
 - Cámara : DroidCam
 
 ---
-<div align = 'center'><image src = './oveja.jpg' align = 'center' width = 250 height = 250></div>
+<div align = 'center'><image src = './resources/images/oveja.jpg' align = 'center' width = 250 height = 250></div>
