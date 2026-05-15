@@ -13,6 +13,9 @@
         - numpy 2.2.6
     - Web app:
         - xdxdxdxd
+    - Base de datos:
+        - postgresql
+        - pyscopg
 - Microcontrolador: ESP32
 - Cámara : DroidCam
 
