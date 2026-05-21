@@ -11,6 +11,7 @@
     - Procesamiento de imagenes:
         - opencv-python 4.13.0.92
         - numpy 2.2.6
+        - face-recognition 1.3.0
     - Web app:
         - xdxdxdxd
     - Base de datos:
