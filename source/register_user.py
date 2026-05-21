@@ -19,4 +19,4 @@ os.makedirs('storage/users/cherry', exist_ok = True)
 np.save('storage/users/cherry/encoding.npy', encoding)
 
 print('Embedding guardado correctamente')
-print(np.load('storage/usets/cherry/encoding.npy'))
+print(np.load('storage/users/cherry/encoding.npy'))
