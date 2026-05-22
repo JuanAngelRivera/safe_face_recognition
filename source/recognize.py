@@ -2,9 +2,6 @@ import cv2
 import face_recognition
 import numpy as np
 
-known_encoding = np.load(
-    "storage/users/cherry/encoding.npy"
-)
 
 cap = cv2.VideoCapture(0)
 

@@ -52,4 +52,4 @@ if len(encodings) == 0:
 encoding = encodings[0]
 
 np.save(f'{user_folder}/encoding.npy', encoding)
-print('Usuario registrado correctamente')
+print('Usuario registrado correctamente')   
