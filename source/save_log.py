@@ -1,11 +1,16 @@
 import psycopg
+import os
+from dotenv import load_dotenv
 
 def save_log(id_usuario, autorizado, confianza):
+    load_dotenv()
+    
     connection = psycopg.connect(
-        dbname = 'safe_face_recognition',
-        user = 'administrador',
-        password = '123',
-        host = '127.0.0.1'
+        dbname = os.getenv('DB_NAME'),
+        user = os.getenv('USER'),
+        password = os.getenv('PASSWORD'),
+        host = os.getenv('HOST'),
+        port = os.getenv('PORT')
     )
 
     cursor = connection.cursor()

@@ -1,13 +1,17 @@
 import os
 import numpy as np
 import psycopg
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def load_users():
     connection = psycopg.connect(
-        dbname = 'safe_face_recognition',
-        user = 'administrador',
-        password = '123',
-        host = '127.0.0.1'
+        dbname = os.getenv('DB_NAME'),
+        user = os.getenv('USER'),
+        password = os.getenv('PASSWORD'),
+        host = os.getenv('HOST'),
+        port = os.getenv('PORT')
     )
     cursor = connection.cursor()
     cursor.execute('select id_usuario, nombre from usuario where autorizado = true;')
