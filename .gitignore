@@ -5,3 +5,4 @@ datos_prueba/
 archivos_prueba/
 storage/users
 .env
+source/__pycache__

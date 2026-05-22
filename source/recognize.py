@@ -19,7 +19,7 @@ if camera_source.isdigit():
 capture = cv2.VideoCapture(camera_source)
 frame_count = 0
 last_detected_name = None
-face_match_threshold = os.getenv('FACE_MATCH_THRESHOLD')
+face_match_threshold = float(os.getenv('FACE_MATCH_THRESHOLD'))
 
 while True:
     ret, frame = capture.read()
@@ -28,7 +28,6 @@ while True:
         break
 
     frame_count += 1
-
     display_frame = frame.copy()
 
     if frame_count % 30 == 0:
@@ -47,12 +46,13 @@ while True:
                 id_usuario = known_ids[best_match_index]
                 autorizado = True
                 color = (0, 255, 0)
-                
+                print('Reconocido :3c')
             else:
                 label = 'Desconocido'
                 id_usuario = None
                 autorizado = False
                 color = (0, 0, 255)
+                print('No reconocido >:3')
 
             top *= 4
             right *= 4
