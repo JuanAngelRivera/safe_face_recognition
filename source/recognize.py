@@ -2,6 +2,7 @@ import cv2
 import face_recognition
 import numpy as np
 from load_users import load_users
+from save_log import save_log
 
 known_encodings, known_names, known_ids = load_users()
 print(known_names)
@@ -9,6 +10,7 @@ print(known_names)
 cap = cv2.VideoCapture(0)
 
 frame_count = 0
+last_detected_name = None
 
 while True:
     ret, frame = cap.read()
@@ -33,15 +35,26 @@ while True:
 
             if distance < 0.5:
                 label = known_names[best_match_index]
+                id_usuario = known_ids[best_match_index]
+                autorizado = True
                 color = (0, 255, 0)
+                
             else:
                 label = 'Desconocido'
+                id_usuario = None
+                autorizado = False
                 color = (0, 0, 255)
 
             top *= 4
             right *= 4
             bottom *= 4
             left *= 4
+
+            if label != last_detected_name:
+                save_log(id_usuario, autorizado, float(distance))
+                last_detected_name = label
+
+                print('log guardado:', label)
 
             cv2.rectangle(display_frame, (left, top), (right, bottom), color, 2)
             cv2.putText(display_frame, f'{label} {distance:.2f}', (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
