@@ -17,7 +17,10 @@
     - Base de datos:
         - postgresql
         - pyscopg
-- Microcontrolador: ESP32
+    - Microcontrolador: ESP32
+        - Lenguaje de programación C
+        - WiFi.h
+        - WebServer.h
 - Cámara : DroidCam
 
 ---
