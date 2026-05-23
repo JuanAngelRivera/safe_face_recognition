@@ -3,15 +3,12 @@ import face_recognition
 import numpy as np
 from load_users import load_users
 from save_log import save_log
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
+import config
 
 known_encodings, known_names, known_ids = load_users()
 print(known_names)
 
-camera_source = os.getenv('CAMERA_SOURCE')
+camera_source = config.camera_source
 
 if camera_source.isdigit():
     camera_source = int(camera_source)
@@ -19,7 +16,6 @@ if camera_source.isdigit():
 capture = cv2.VideoCapture(camera_source)
 frame_count = 0
 last_detected_name = None
-face_match_threshold = float(os.getenv('FACE_MATCH_THRESHOLD'))
 
 while True:
     ret, frame = capture.read()
@@ -41,7 +37,7 @@ while True:
             best_match_index = np.argmin(face_distances)
             distance = face_distances[best_match_index]
 
-            if distance < face_match_threshold:
+            if distance < config.face_match_threshold:
                 label = known_names[best_match_index]
                 id_usuario = known_ids[best_match_index]
                 autorizado = True

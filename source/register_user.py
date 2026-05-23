@@ -1,21 +1,13 @@
 import cv2
 import face_recognition
 import numpy as np
-import psycopg
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
+import config
+from connection import connect
 
 nombre = input('Nombre de usuario: ')
 
-connection = psycopg.connect(
-        dbname = os.getenv('DB_NAME'),
-        user = os.getenv('USER'),
-        password = os.getenv('PASSWORD'),
-        host = os.getenv('HOST'),
-        port = os.getenv('PORT')
-    )
+connection = connect()
 
 cursor = connection.cursor()
 cursor.execute('insert into usuario(nombre) values (%s) returning id_usuario;', (nombre, ))
@@ -28,7 +20,7 @@ connection.commit()
 user_folder = f'storage/users/{id_usuario}'
 os.makedirs(user_folder, exist_ok = True)
 
-camera_source = os.getenv('CAMERA_SOURCE')
+camera_source = config.camera_source
 
 if camera_source.isdigit():
     camera_source = int(camera_source)

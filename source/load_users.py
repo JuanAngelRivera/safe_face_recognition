@@ -1,19 +1,11 @@
 import os
 import numpy as np
-import psycopg
-from dotenv import load_dotenv
-
-load_dotenv()
+from connection import connect
 
 def load_users():
-    connection = psycopg.connect(
-        dbname = os.getenv('DB_NAME'),
-        user = os.getenv('USER'),
-        password = os.getenv('PASSWORD'),
-        host = os.getenv('HOST'),
-        port = os.getenv('PORT')
-    )
+    connection = connect()
     cursor = connection.cursor()
+    
     cursor.execute('select id_usuario, nombre from usuario where autorizado = true;')
     usuarios = cursor.fetchall()
 
