@@ -13,7 +13,9 @@
         - numpy 2.2.6
         - face-recognition 1.3.0
     - Web app:
-        - xdxdxdxd
+        - flask
+        - flask-cors
+        - requests
     - Base de datos:
         - postgresql
         - pyscopg

@@ -5,6 +5,7 @@ from load_users import load_users
 from save_log import save_log
 from dotenv import load_dotenv
 import os
+from esp32_controller import *
 
 load_dotenv()
 
@@ -21,6 +22,10 @@ frame_count = 0
 last_detected_name = None
 face_match_threshold = float(os.getenv('FACE_MATCH_THRESHOLD'))
 
+if len(known_encodings) == 0:
+    print("No hay usuarios registrados")
+    exit()
+    
 while True:
     ret, frame = capture.read()
 
@@ -35,6 +40,8 @@ while True:
         rgb = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
         face_locations = face_recognition.face_locations(rgb, model='hog')
         face_encodings = face_recognition.face_encodings(rgb, face_locations)
+    if len(face_encodings) == 0:
+        last_detected_name = None
 
         for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
             face_distances = face_recognition.face_distance(known_encodings, face_encoding)
@@ -46,13 +53,19 @@ while True:
                 id_usuario = known_ids[best_match_index]
                 autorizado = True
                 color = (0, 255, 0)
+                
                 print('Reconocido :3c')
+                #requests.get(f"{ESP32_URL}/open")
+                open_access()
+                
             else:
                 label = 'Desconocido'
                 id_usuario = None
                 autorizado = False
                 color = (0, 0, 255)
                 print('No reconocido >:3')
+                #requests.get(f"{ESP32_URL}/deny")
+                deny_access()
 
             top *= 4
             right *= 4
