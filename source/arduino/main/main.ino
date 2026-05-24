@@ -1,37 +1,35 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Santos111@_2.4Gnormal"; // tiene que ser 2.4G
-const char* password = "CARH780217HTLRDG02@";
+const char* ssid = "INFINITUM3374"; // tiene que ser 2.4G
+const char* password = "kBM55NX9FB";
 
 WebServer server(80);
 
-const int greenLed = 26;
+const int greenLed = 33;
 const int redLed = 27;
 const int buzzer = 25;
 
 void handleOpen() {
-  /*digitalWrite(greenLed, HIGH);
+  digitalWrite(greenLed, HIGH);
   tone(buzzer, 1000);
   delay(1000);
 
   digitalWrite(greenLed, LOW);
   noTone(buzzer);
 
-  server.send(200, "text/plain", "ACCESS GRANTED");*/
-  Serial.println("ACCESO GARANTIZADO");
+  server.send(200, "text/plain", "ACCESS GRANTED");
 }
 
 void handleDeny() {
-  /*digitalWrite(redLed, HIGH);
+  digitalWrite(redLed, HIGH);
   tone(buzzer, 300);
   delay(1500);
 
   digitalWrite(redLed, LOW);
   noTone(buzzer);
 
-  server.send(200, "text/plain", "ACCESS DENIED");*/
-  Serial.println("ACCESO DENEGADO");
+  server.send(200, "text/plain", "ACCESS DENIED");
 }
 
 void setup() {

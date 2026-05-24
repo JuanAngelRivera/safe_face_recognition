@@ -7,18 +7,18 @@
 ---
 ## Librerías y recursos utilizados
 
-- Lenguaje de programación: Python
+- Lenguaje de programación: Python 3.10.0
     - Procesamiento de imagenes:
         - opencv-python 4.13.0.92
         - numpy 2.2.6
         - face-recognition 1.3.0
     - Web app:
-        - xdxdxdxd
+        - requests 2.34.2
     - Base de datos:
         - postgresql
         - pyscopg
     - Microcontrolador: ESP32
-        - Lenguaje de programación C
+        - Lenguaje de programación: C
         - WiFi.h
         - WebServer.h
 - Cámara : DroidCam
