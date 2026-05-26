@@ -3,15 +3,7 @@ import face_recognition
 import numpy as np
 from load_users import load_users
 from save_log import save_log
-<<<<<<< HEAD
-from dotenv import load_dotenv
-import os
-from esp32_controller import *
-
-load_dotenv()
-=======
 import config
->>>>>>> origin/main
 
 known_encodings, known_names, known_ids = load_users()
 print(known_names)
@@ -91,3 +83,4 @@ while True:
 
 capture.release()
 cv2.destroyAllWindows()
+
