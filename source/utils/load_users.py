@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from connection import connect
+from source.arduino.main.utils.connection import connect
 
 def load_users():
     connection = connect()

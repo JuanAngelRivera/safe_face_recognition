@@ -1,4 +1,4 @@
-from connection import connect
+from source.arduino.main.utils.connection import connect
 
 connection = connect()
 cursor = connection.cursor()

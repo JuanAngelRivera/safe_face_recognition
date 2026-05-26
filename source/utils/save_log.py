@@ -1,4 +1,4 @@
-from connection import connect
+from source.arduino.main.utils.connection import connect
 def save_log(id_usuario, autorizado, confianza): 
     connection = connect()
     cursor = connection.cursor()
