@@ -20,7 +20,7 @@ def deny_access():
     try:
 
         requests.get(
-            f"{ESP32_URL}/deny",
+            f"{esp32_url}/deny",
             timeout=2
         )
 
