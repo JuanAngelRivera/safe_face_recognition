@@ -6,3 +6,4 @@ archivos_prueba/
 storage/users
 .env
 source/__pycache__
+source/utils/__pycache__
