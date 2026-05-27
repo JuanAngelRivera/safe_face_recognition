@@ -1,9 +1,9 @@
 import cv2
 import face_recognition
 import numpy as np
-from source.arduino.main.utils.load_users import load_users
-from source.arduino.main.utils.save_log import save_log
-import source.arduino.main.utils.config as config
+from source.utils.load_users import load_users
+from source.utils.save_log import save_log
+import source.utils.config as config
 
 known_encodings, known_names, known_ids = load_users()
 print(known_names)

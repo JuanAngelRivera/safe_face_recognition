@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from source.arduino.main.utils.connection import connect
+from source.utils.connection import connect
 
 app = Flask(__name__)
 

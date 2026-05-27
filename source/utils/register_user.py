@@ -2,8 +2,8 @@ import cv2
 import face_recognition
 import numpy as np
 import os
-import source.arduino.main.utils.config as config
-from source.arduino.main.utils.connection import connect
+import source.utils.config as config
+from source.utils.connection import connect
 
 nombre = input('Nombre de usuario: ')
 
