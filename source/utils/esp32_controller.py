@@ -1,13 +1,13 @@
 import requests
 
-from config.settings import ESP32_URL
+from utils.config import esp32_url
 
 def open_access():
 
     try:
 
         requests.get(
-            f"{ESP32_URL}/open",
+            f"{esp32_url}/open",
             timeout=2
         )
 
