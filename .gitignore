@@ -7,3 +7,4 @@ storage/users
 .env
 source/__pycache__
 source/utils/__pycache__
+source/web/__pycache__
