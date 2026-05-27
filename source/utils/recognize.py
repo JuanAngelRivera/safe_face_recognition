@@ -1,87 +1,63 @@
 import cv2
 import face_recognition
 import numpy as np
-from source.utils.load_users import load_users
+from source.utils.load_users import load_user
 from source.utils.save_log import save_log
 import source.utils.config as config
+from source.utils.esp32_controller import open_access, deny_access
 
-known_encodings, known_names, known_ids = load_users()
-print(known_names)
+def recognize(encoding, id):
+    camera_source = config.camera_source
 
-camera_source = config.camera_source
+    if camera_source.isdigit():
+        camera_source = int(camera_source)
 
-if camera_source.isdigit():
-    camera_source = int(camera_source)
+    capture = cv2.VideoCapture(camera_source)
+    print('Encendió cámara')
+    attempts = 0
+    max_attempts = 150
+    failed_attempt = 0
 
-capture = cv2.VideoCapture(camera_source)
-frame_count = 0
-last_detected_name = None
+    while attempts < max_attempts and failed_attempt < 3:
+        ret, frame = capture.read()
 
-if len(known_encodings) == 0:
-    print("No hay usuarios registrados")
-    exit()
-    
-while True:
-    ret, frame = capture.read()
+        if not ret:
+            break
 
-    if not ret:
-        break
+        attempts += 1
+        print(attempts)
+        display_frame = frame.copy()
 
-    frame_count += 1
-    display_frame = frame.copy()
+        if attempts % 15 == 0:
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            rgb = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+            face_locations = face_recognition.face_locations(rgb, model = 'hog')
+            face_encodings = face_recognition.face_encodings(rgb, face_locations)
 
-    if frame_count % 30 == 0:
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        rgb = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
-        face_locations = face_recognition.face_locations(rgb, model = 'hog')
-        face_encodings = face_recognition.face_encodings(rgb, face_locations)
+            if len(face_encodings) == 0:
+                continue
 
-        if len(face_encodings) == 0:
-            last_detected_name = None
-            print(face_locations)
+            for face_location, face_encoding in zip(face_locations, face_encodings):
 
-        for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-            face_distances = face_recognition.face_distance(known_encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            distance = face_distances[best_match_index]
+                face_distance = face_recognition.face_distance([encoding], face_encoding)
+                distance = face_distance[0]
 
-            print('distance', distance)
+                if distance < float(config.face_match_threshold):  
+                    print('Reconocido :3c')
+                    open_access() 
+                    save_log(id, True, distance)
+                    return True
+                else:
+                    failed_attempt += 1
+                    print('No reconocido >:3:', failed_attempt)
+                    deny_access()
+                    save_log(id, False, distance)
+                
+        cv2.imshow("Recognition", display_frame)
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
 
-            if distance < float(config.face_match_threshold):
-                label = known_names[best_match_index]
-                id_usuario = known_ids[best_match_index]
-                autorizado = True
-                color = (0, 255, 0)
-                    
-                print('Reconocido :3c')
-                # open_access() 
-            else:
-                label = 'Desconocido'
-                id_usuario = None
-                autorizado = False
-                color = (0, 0, 255)
-                print('No reconocido >:3')
-                #deny_access()
+    capture.release()
+    cv2.destroyAllWindows()
 
-            top *= 4
-            right *= 4
-            bottom *= 4
-            left *= 4
-
-            if label != last_detected_name:
-                save_log(id_usuario, autorizado, float(distance))
-                last_detected_name = label
-
-                print('log guardado:', label)
-
-            cv2.rectangle(display_frame, (left, top), (right, bottom), color, 2)
-            cv2.putText(display_frame, f'{label} {distance:.2f}', (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)    
-            
-    cv2.imshow("Recognition", display_frame)
-
-    if cv2.waitKey(1) & 0xFF == 27:
-        break
-
-capture.release()
-cv2.destroyAllWindows()
-
+    return False

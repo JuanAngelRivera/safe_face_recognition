@@ -2,6 +2,26 @@ import os
 import numpy as np
 from source.utils.connection import connect
 
+def load_user(nombre):
+    connection = connect()
+    cursor = connection.cursor()
+
+    cursor.execute('select id_usuario from usuario where autorizado = true and nombre = %s;', (nombre, ))
+    usuario = cursor.fetchone()
+    id_usuario = usuario[0]
+
+    encoding_path = (f'storage/users/{id_usuario}/encoding.npy')
+
+    if os.path.exists(encoding_path):
+        encoding = np.load(encoding_path)
+
+    if encoding is None:
+        print('No se encontró el encoding')
+        exit()
+
+    return encoding, id_usuario
+
+
 def load_users():
     connection = connect()
     cursor = connection.cursor()

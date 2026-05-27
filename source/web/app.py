@@ -1,25 +1,19 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
 import face_recognition
 import numpy as np
-from flask import (Flask, render_template, request, redirect, session )
+from flask import (Flask, render_template, request, redirect, session)
 from source.utils.connection import connect
-from source.web.recognize_users import recognize_user
+from source.utils.recognize import recognize
+from source.utils.load_users import load_user
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask( __name__, template_folder=os.path.join(BASE_DIR, "templates"))
-
 app.secret_key = "safe_face_secret"
-
-print("APP WEB CORRECTA")
-
 
 @app.route("/login")
 def login():
-
     return render_template("login.html")
 
 
@@ -28,51 +22,19 @@ def login_face():
 
     nombre = request.form["nombre"]
 
-    print("Intentando login:", nombre)
+    encoding, id = load_user(nombre)
 
-    connection = connect()
-    cursor = connection.cursor()
-
-    cursor.execute(
-        """
-        SELECT id_usuario
-        FROM usuario
-        WHERE nombre = %s
-        """,
-        (nombre,)
-    )
-
-    usuario = cursor.fetchone()
-
-    cursor.close()
-    connection.close()
-
-
-    if usuario is None:
-
-        print("Usuario no existe")
-
+    if id is None:
         return redirect("/login")
 
-    print("Usuario encontrado")
-
-
-    resultado = recognize_user(nombre)
+    print('Encontró usuario + encoding')
+    resultado = recognize(encoding, id)
 
     if resultado:
-
-        print("LOGIN CORRECTO")
-
         session["authenticated"] = True
         session["usuario"] = nombre
-
         return redirect("/")
-
-
     else:
-
-        print("LOGIN FALLIDO")
-
         return redirect("/login")
 
 

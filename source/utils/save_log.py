@@ -12,3 +12,4 @@ def save_log(id_usuario, autorizado, confianza):
     connection.commit()
     cursor.close()
     connection.close()
+    print('save_log realizado')
