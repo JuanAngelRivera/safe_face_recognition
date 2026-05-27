@@ -13,12 +13,10 @@
         - numpy 2.2.6
         - face-recognition 1.3.0
     - Web app:
-        - flask
-        - flask-cors
-        - requests
-    - Base de datos:
-        - postgresql
-        - pyscopg
+        - flask 3.1.3
+        - requests 2.34.2
+    - Base de datos:PostgreSQL
+        - pyscopg 3.3.4
     - Microcontrolador: ESP32
         - Lenguaje de programación: C
         - WiFi.h
