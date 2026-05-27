@@ -25,7 +25,6 @@ def recognize(encoding, id):
             break
 
         attempts += 1
-        print(attempts)
         display_frame = frame.copy()
 
         if attempts % 15 == 0:

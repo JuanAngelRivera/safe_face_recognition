@@ -2,56 +2,69 @@ import cv2
 import face_recognition
 import numpy as np
 import os
-import source.utils.config as config
+from source.utils.config import camera_source as cm
 from source.utils.connection import connect
 
-nombre = input('Nombre de usuario: ')
+def register_user(nombre):
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute('insert into usuario(nombre) values (%s) returning id_usuario;', (nombre, ))
 
-connection = connect()
+    id_usuario = cursor.fetchone()[0]
+    print('id usuario:', id_usuario)
 
-cursor = connection.cursor()
-cursor.execute('insert into usuario(nombre) values (%s) returning id_usuario;', (nombre, ))
+    connection.commit()
 
-id_usuario = cursor.fetchone()[0]
-print('id usuario:', id_usuario)
+    user_folder = f'storage/users/{id_usuario}'
+    os.makedirs(user_folder, exist_ok = True)
 
-connection.commit()
+    camera_source = cm
 
-user_folder = f'storage/users/{id_usuario}'
-os.makedirs(user_folder, exist_ok = True)
+    if camera_source.isdigit():
+        camera_source = int(camera_source)
 
-camera_source = config.camera_source
+    capture = cv2.VideoCapture(camera_source)
 
-if camera_source.isdigit():
-    camera_source = int(camera_source)
+    frame_count = 0
+    while True:
+        ret, frame = capture.read()
 
-capture = cv2.VideoCapture(camera_source)
+        if not ret:
+            break
 
-print('Presiona \'ESPACIO\'para capturar foto')
+        frame_count += 1
 
-while True:
-    ret, frame = capture.read()
-    cv2.imshow('Registro', frame)
-    key = cv2.waitKey(1)
+        display_frame = frame.copy()
 
-    if key == 32:
-        break
+        if frame_count % 15 == 0:
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            rgb = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+            face_locations = face_recognition.face_locations(rgb, model = 'hog')
+            face_encodings = face_recognition.face_encodings(rgb, face_locations)
 
-capture.release()
-cv2.destroyAllWindows()
+            if len(face_encodings) == 0:
+                continue
+                
+            image_path = f'{user_folder}/profile.jpg'
+            cv2.imwrite(image_path, frame)
 
-image_path = f'{user_folder}/profile.jpg'
-cv2.imwrite(image_path, frame)
+            encodings = face_recognition.face_encodings(rgb)
 
-rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            if len(encodings) == 0:
+                print('No se detectó un rostro')
+                exit()
 
-encodings = face_recognition.face_encodings(rgb)
+            encoding = encodings[0]
 
-if len(encodings) == 0:
-    print('No se detectó un rostro')
-    exit()
+            np.save(f'{user_folder}/encoding.npy', encoding)
+            print('Usuario registrado correctamente')
+            return True
+        
+        cv2.imshow("Register user", display_frame)
+        if cv2.waitKey(1) & 0xFF == 32:
+            break
+        
+    capture.release()
+    cv2.destroyAllWindows()
 
-encoding = encodings[0]
-
-np.save(f'{user_folder}/encoding.npy', encoding)
-print('Usuario registrado correctamente')
+    return False

@@ -1,10 +1,9 @@
 import os
-import face_recognition
-import numpy as np
 from flask import (Flask, render_template, request, redirect, session)
 from source.utils.connection import connect
 from source.utils.recognize import recognize
 from source.utils.load_users import load_user
+from source.utils.register_user import register_user as ru
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -90,46 +89,22 @@ def users():
         usuarios=usuarios
     )
 
-
-# =========================================================
-# REGISTER
-# =========================================================
-
 @app.route("/register")
 def register():
-
     if not session.get("authenticated"):
-
         return redirect("/login")
-
-    print("ENTRO REGISTER")
 
     return render_template("register.html")
 
 
 @app.route("/register_user", methods=["POST"])
 def register_user():
-
     if not session.get("authenticated"):
-
         return redirect("/login")
 
-    print("REGISTRANDO USUARIO")
-
     nombre = request.form["nombre"]
-
-    imagen = request.files["imagen"]
-
-    # =====================================================
-    # CONEXIÓN
-    # =====================================================
-
     connection = connect()
     cursor = connection.cursor()
-
-    # =====================================================
-    # VALIDAR DUPLICADOS
-    # =====================================================
 
     cursor.execute(
         """
@@ -137,121 +112,29 @@ def register_user():
         FROM usuario
         WHERE nombre = %s
         """,
-        (nombre,)
+        (nombre, )
     )
 
     existing_user = cursor.fetchone()
 
     if existing_user:
-
         print("Usuario ya existe")
-
         cursor.close()
         connection.close()
-
         return redirect("/register")
 
-    # =====================================================
-    # GUARDAR IMAGEN
-    # =====================================================
+    respuesta = ru(nombre)
 
-    upload_folder = os.path.join(
-        BASE_DIR,
-        "static",
-        "uploads"
-    )
-
-    os.makedirs(
-        upload_folder,
-        exist_ok=True
-    )
-
-    image_path = os.path.join(
-        upload_folder,
-        imagen.filename
-    )
-
-    imagen.save(image_path)
-
-    print("Imagen guardada")
-
-    # =====================================================
-    # GENERAR EMBEDDING
-    # =====================================================
-
-    image = face_recognition.load_image_file(
-        image_path
-    )
-
-    encodings = face_recognition.face_encodings(
-        image
-    )
-
-    if len(encodings) == 0:
-
-        print("No se detectó rostro")
-
-        return redirect("/register")
-
-    embedding = encodings[0]
-
-    # =====================================================
-    # GUARDAR EMBEDDING
-    # =====================================================
-
-    embedding_dir = os.path.join(
-        "storage",
-        "embeddings"
-    )
-
-    os.makedirs(
-        embedding_dir,
-        exist_ok=True
-    )
-
-    embedding_path = os.path.join(
-        embedding_dir,
-        f"{nombre}.npy"
-    )
-
-    np.save(
-        embedding_path,
-        embedding
-    )
-
-    print("Embedding guardado")
-
-    # =====================================================
-    # INSERTAR USUARIO
-    # =====================================================
-
-    cursor.execute(
-        """
-        INSERT INTO usuario(nombre)
-        VALUES(%s)
-        """,
-        (nombre,)
-    )
-
-    connection.commit()
-
-    cursor.close()
-    connection.close()
-
-    print("Usuario guardado en BD")
-
-    return redirect("/users")
-
-
-# =========================================================
-# LOGS
-# =========================================================
+    if respuesta:
+        print("Usuario guardado en BD")
+        return redirect("/users")
+    else:
+        print('No se pudo registrar el usuario')
+        return redirect('/register')
 
 @app.route("/logs")
 def logs():
-
     if not session.get("authenticated"):
-
         return redirect("/login")
 
     connection = connect()
@@ -259,19 +142,10 @@ def logs():
 
     cursor.execute(
         """
-        SELECT
-            l.id_log,
-            u.nombre,
-            l.fecha,
-            l.autorizado,
-            l.distancia
-
-        FROM log_acceso l
-
-        LEFT JOIN usuario u
-        ON l.id_usuario = u.id_usuario
-
-        ORDER BY l.fecha DESC
+        select a.id_acceso, u.nombre, a.fecha, a.autorizado, a.confianza
+        from acceso a
+        left join usuario u on a.id_usuario = u.id_usuario
+        order by a.fecha desc
         """
     )
 
@@ -282,7 +156,7 @@ def logs():
 
     return render_template(
         "logs.html",
-        logs=logs
+        logs = logs
     )
 
 
