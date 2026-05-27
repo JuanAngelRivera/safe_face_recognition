@@ -21,6 +21,16 @@ def load_user(nombre):
 
     return encoding, id_usuario
 
+def get_admin(nombre):
+    connection = connect()
+    cursor = connection.cursor()
+
+    cursor.execute('select 1 from usuario where autorizado = true and nombre = %s and administrador = true;', (nombre, ))
+    verification = cursor.fetchone()
+
+    return verification[0] == 1
+
+
 
 def load_users():
     connection = connect()

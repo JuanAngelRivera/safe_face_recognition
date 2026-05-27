@@ -2,7 +2,7 @@ import os
 from flask import (Flask, render_template, request, redirect, session)
 from source.utils.connection import connect
 from source.utils.recognize import recognize
-from source.utils.load_users import load_user
+from source.utils.load_users import load_user, get_admin
 from source.utils.register_user import register_user as ru
 
 
@@ -21,12 +21,13 @@ def login_face():
 
     nombre = request.form["nombre"]
 
-    encoding, id = load_user(nombre)
+    respuesta = get_admin(nombre)
 
-    if id is None:
+    if respuesta == False:
+        print('El usuario no es administrador')
         return redirect("/login")
 
-    print('Encontró usuario + encoding')
+    encoding, id = load_user(nombre)
     resultado = recognize(encoding, id)
 
     if resultado:
@@ -74,8 +75,9 @@ def users():
 
     cursor.execute(
         """
-        SELECT *
-        FROM usuario
+        select id_usuario, nombre, autorizado, administrador, fecha_registro::date
+        from usuario
+        order by id_usuario
         """
     )
 
@@ -86,7 +88,7 @@ def users():
 
     return render_template(
         "users.html",
-        usuarios=usuarios
+        usuarios = usuarios
     )
 
 @app.route("/register")
@@ -142,7 +144,8 @@ def logs():
 
     cursor.execute(
         """
-        select a.id_acceso, u.nombre, a.fecha, a.autorizado, a.confianza
+        select a.id_acceso, u.nombre, a.autorizado, a.fecha::date, to_char(a.fecha::time, 'HH24:MI:SS'), 
+        concat(to_char(((1 - a.confianza) * 100), 'FM999.99'), '%')
         from acceso a
         left join usuario u on a.id_usuario = u.id_usuario
         order by a.fecha desc
