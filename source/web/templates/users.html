@@ -15,29 +15,40 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Autorizado</th>
-                        <th>Perm. de admin.</th>
-                        <th>Fecha de registro</th>
-                        <th>Acciones</th>
+                        <th><center>ID</center></th>
+                        <th><center>Nombre</center></th>
+                        <th><center>Autorizado</center></th>
+                        <th><center>Perm. de admin.</center></th>
+                        <th><center>Fecha de registro</center></th>
+                        <th><center>Acciones</center></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for usuario in usuarios %}
                     <tr>
-                        <td>{{ usuario[0] }}</td>
-                        <td><strong>{{ usuario[1] }}</strong></td>
+                        <td><center>{{ usuario[0] }}</center></td>
+                        <td><strong><center>{{ usuario[1] }}</center></strong></td>
                         <td>
+                            <center>
                             {% if usuario[2] %}
                             <span class="status-badge status-active">Autorizado</span>
                             {% else %}
                             <span class="status-badge status-inactive">Restringido</span>
                             {% endif %}
+                            </center>
                         </td>
-                        <td>{{ usuario[3] }}</td>
-                        <td>{{ usuario[4] }}</td>
+                        <td>
+                             <center>
+                            {% if usuario[3] %}
+                            <span class="status-badge status-active" style="width: 50px;">Sí</span>
+                            {% else %}
+                            <span class="status-badge status-inactive" style="width: 50px;">No</span>
+                            {% endif %}
+                            </center>
+                        </td>
+                        <td><center>{{ usuario[4] }}</center></td>
                         <td class="table-actions-cell">
+                            <center>
                             {% if usuario[2] %}
                             <form 
                             action="/deactivate_user/{{ usuario[0] }}" 
@@ -57,6 +68,16 @@
                                 </button>
                             </form>
                             {% endif %}
+                            <div style="height: 8px;" ></div>
+                            <form 
+                            action="/revoke_admin/{{ usuario[0] }}" 
+                            method="POST" 
+                            onsubmit="return confirm('¿Seguro que deseas revocar los permisos de administrador al usuario {{ usuario[1] }}?\n Esta acción no se puede deshacer.');">
+                                <button type="submit" class = "btn btn-danger btn-small" {%if not usuario[3]%} disabled {%endif%}>
+                                    Revocar administrador
+                                </button>
+                            </form>
+                            </center>
                         </td>
                     </tr>
                     {% endfor %}
