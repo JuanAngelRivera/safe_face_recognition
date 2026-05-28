@@ -162,7 +162,7 @@ def logs():
     cursor.execute(
             """
             select a.id_acceso, u.nombre, a.autorizado, a.fecha::date, to_char(a.fecha::time, 'HH24:MI:SS'), 
-            concat(to_char(((1 - a.confianza) * 100), 'FM999.99'), '%')
+            to_char(((1 - a.confianza) * 100), 'FM999.99')
             from acceso a
             left join usuario u on a.id_usuario = u.id_usuario
             order by a.fecha desc
@@ -173,6 +173,7 @@ def logs():
 
     cursor.close()
     connection.close()
+    print(logs[5])
 
     return render_template(
             "logs.html",
