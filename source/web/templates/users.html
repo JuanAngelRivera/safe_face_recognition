@@ -5,49 +5,68 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>
-        Usuarios Registrados
-    </h1>
+    <div class="container">
+        <div class="page-header">
+            <h1>Usuarios Registrados</h1>
+            <p>Sistema de gestión de acceso</p>
+        </div>
 
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Autorizado</th>
-            <th>Perm. de admin.</th>
-            <th>Fecha de registro</th>
-            <th>Acciones</th>
-        </tr>
-        {% for usuario in usuarios %}
-        <tr>
-            <td>{{ usuario[0] }}</td>
-            <td>{{ usuario[1] }}</td>
-            <td>{{ usuario[2] }}</td>
-            <td>{{ usuario[3] }}</td>
-            <td>{{ usuario[4] }}</td>
-            <td>
-                {% if usuario[2] %}
-                <form 
-                action="/deactivate_user/{{ usuario[0] }}" 
-                method="POST" 
-                onsubmit="return confirm('¿Seguro que deseas restringir el acceso al usuario {{usuario[1]}}?');">
-                    <button type="submit">
-                        Restringir acceso
-                    </button>
-                </form>
-                {% else %}
-                <form 
-                action="/activate_user/{{ usuario[0] }}" 
-                method="POST" 
-                onsubmit="return confirm('¿Seguro que deseas reactivar el acceso al usuario {{usuario[1]}}?');">
-                    <button type="submit">
-                        Reactivar acceso
-                    </button>
-                </form>
-                {%endif%}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Autorizado</th>
+                        <th>Perm. de admin.</th>
+                        <th>Fecha de registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario[0] }}</td>
+                        <td><strong>{{ usuario[1] }}</strong></td>
+                        <td>
+                            {% if usuario[2] %}
+                            <span class="status-badge status-active">Autorizado</span>
+                            {% else %}
+                            <span class="status-badge status-inactive">Restringido</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ usuario[3] }}</td>
+                        <td>{{ usuario[4] }}</td>
+                        <td class="table-actions-cell">
+                            {% if usuario[2] %}
+                            <form 
+                            action="/deactivate_user/{{ usuario[0] }}" 
+                            method="POST" 
+                            onsubmit="return confirm('¿Seguro que deseas restringir el acceso al usuario {{ usuario[1] }}?');">
+                                <button type="submit" class="btn btn-danger btn-small">
+                                    Restringir acceso
+                                </button>
+                            </form>
+                            {% else %}
+                            <form 
+                            action="/activate_user/{{ usuario[0] }}" 
+                            method="POST" 
+                            onsubmit="return confirm('¿Seguro que deseas reactivar el acceso al usuario {{ usuario[1] }}?');">
+                                <button type="submit" class="btn btn-success btn-small">
+                                    Reactivar acceso
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">← Volver al inicio</a>
+        </div>
+    </div>
 </body>
 </html>

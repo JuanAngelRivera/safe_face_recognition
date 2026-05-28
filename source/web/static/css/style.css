@@ -309,3 +309,177 @@ tbody tr:last-child td {
         padding: 0 1rem;
     }
 }
+
+/* ============================
+   INDICADORES DE ESTADO
+============================ */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.status-inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}
+
+/* ============================
+   BOTONES DE ACCIÓN EN TABLA
+============================ */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons .btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    min-width: 100px;
+}
+
+.table-actions-cell {
+    white-space: nowrap;
+}
+
+/* ============================
+   HEADER PRINCIPAL
+============================ */
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+.header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+}
+
+.header-icon svg {
+    color: white;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* ============================
+   GRID 2x2 DE BOTONES
+============================ */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.menu-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    background: var(--card-background);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    text-align: center;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-color);
+}
+
+.menu-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+
+.menu-card:hover .menu-icon {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+}
+
+.menu-card:hover .menu-icon svg {
+    color: white;
+}
+
+.menu-icon svg {
+    color: var(--primary-color);
+}
+
+.menu-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.menu-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ============================
+   RESPONSIVE PARA GRID
+============================ */
+@media (max-width: 600px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .main-title {
+        font-size: 1.75rem;
+    }
+    
+    .header-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .header-icon svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
