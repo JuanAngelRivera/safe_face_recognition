@@ -4,7 +4,6 @@ import numpy as np
 from source.utils.load_users import load_user
 from source.utils.save_log import save_log
 import source.utils.config as config
-from source.utils.esp32_controller import open_access, deny_access
 
 def recognize(encoding, id):
     camera_source = config.camera_source
@@ -43,13 +42,11 @@ def recognize(encoding, id):
 
                 if distance < float(config.face_match_threshold):  
                     print('Reconocido :3c')
-                    open_access() 
                     save_log(id, True, distance)
                     return True
                 else:
                     failed_attempt += 1
                     print('No reconocido >:3:', failed_attempt)
-                    deny_access()
                     save_log(id, False, distance)
                 
         cv2.imshow("Recognition", display_frame)

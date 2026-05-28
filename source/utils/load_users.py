@@ -61,5 +61,4 @@ def load_users():
         print('No hay usuarios registrados')
         exit()
 
-    print('Usuarios cargados:', len(known_encodings))
     return known_encodings, known_names, known_ids
