@@ -2,32 +2,81 @@
 <html>
 <head>
     <title>Registrar Usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>
-        Registrar Usuario
-    </h1>
-    <form
-        action="/register_user"
-        method="POST"
-        enctype="multipart/form-data"
-    >
-        <label>
-            Nombre:
-        </label>
-        <input
-            type="text"
-            name="nombre"
-            required
-        >
-        <br><br>
-        <label>
-            ¿Otorgar Administrador?
-        </label>
-        <input type="checkbox" name = "administrador" value = 'true'>
-        <button type="submit">
-            Registrar
-        </button>
-    </form>
+    <div class="container">
+        <!-- Título centrada -->
+        <div class="page-header">
+            <div class="header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="8.5" cy="7" r="4"/>
+                    <line x1="20" y1="8" x2="20" y2="14"/>
+                    <line x1="23" y1="11" x2="17" y2="11"/>
+                </svg>
+            </div>
+            <h1 class="main-title">Registrar Usuario</h1>
+            <p class="subtitle">Agregar nuevo usuario al sistema</p>
+        </div>
+
+        <!-- Formulario centrado -->
+        <div class="form-card">
+            <form 
+                action="/register_user" 
+                method="POST" 
+                enctype="multipart/form-data"
+                class="form"
+            >
+                <div class="form-group">
+                    <label for="nombre">Nombre completo</label>
+                    <input 
+                        type="text" 
+                        id="nombre"
+                        name="nombre" 
+                        placeholder="Ingresa el nombre del usuario"
+                        required
+                        class="form-input"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-wrapper">
+                        <input 
+                            type="checkbox" 
+                            id="administrador" 
+                            name="administrador" 
+                            value="true"
+                            class="checkbox-input"
+                        >
+                        <label for="administrador" class="checkbox-label">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Otorgar permisos de administrador</span>
+                        </label>
+                    </div>
+                    <p class="form-hint">Marca esta opción si deseas que el usuario tenga acceso al panel de administración</p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="8.5" cy="7" r="4"/>
+                            <line x1="20" y1="8" x2="20" y2="14"/>
+                            <line x1="23" y1="11" x2="17" y2="11"/>
+                        </svg>
+                        Registrar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Botón volver -->
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">
+                ← Volver al inicio
+            </a>
+        </div>
+    </div>
 </body>
 </html>

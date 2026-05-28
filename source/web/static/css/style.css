@@ -353,6 +353,7 @@ tbody tr:last-child td {
     white-space: nowrap;
 }
 
+
 /* ============================
    HEADER PRINCIPAL
 ============================ */
@@ -461,7 +462,7 @@ tbody tr:last-child td {
 }
 
 /* ============================
-   RESPONSIVE PARA GRID
+RESPONSIVE PARA GRID
 ============================ */
 @media (max-width: 600px) {
     .menu-grid {
@@ -483,3 +484,223 @@ tbody tr:last-child td {
     }
 }
 
+
+/* ============================
+   FORMULARIO DE REGISTRO
+============================ */
+.form-card {
+    max-width: 500px;
+    margin: 0 auto;
+    background: var(--card-background);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2.5rem;
+}
+
+.form-card .form-group {
+    margin-bottom: 1.75rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--background-color);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Checkbox personalizado */
+.checkbox-wrapper {
+    margin-bottom: 0.5rem;
+}
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    background: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.checkbox-label:hover {
+    border-color: var(--primary-color);
+}
+
+.checkbox-input:checked + .checkbox-label {
+    border-color: var(--primary-color);
+    background: #eff6ff;
+}
+
+.checkbox-custom {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    margin-right: 0.75rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.checkbox-input:checked + .checkbox-label .checkbox-custom {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-input:checked + .checkbox-label .checkbox-custom::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.checkbox-text {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+}
+
+/* Botón submit */
+.btn-full {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-full svg {
+    flex-shrink: 0;
+}
+
+
+/* ============================
+   LOGIN FACIAL
+============================ */
+/* Header icon verde */
+.header-icon-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+}
+
+/* Input con ícono */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon svg {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.icon-input {
+    padding: 0.875rem 1rem 0.875rem 3.5rem !important;
+    width: 100%;
+}
+
+/* Botón verde */
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Alerta informativa */
+.info-alert {
+    max-width: 500px;
+    margin: 1.5rem auto 0;
+    padding: 1rem 1.25rem;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.info-alert svg {
+    color: #0284c7;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.info-alert p {
+    font-size: 0.9rem;
+    color: #0369a1;
+    line-height: 1.5;
+}
+
+/* Animación suave en el formulario */
+.form-card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-card .page-header {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.info-alert {
+    animation: fadeInUp 0.5s ease-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+}
