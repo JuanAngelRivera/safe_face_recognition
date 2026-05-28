@@ -28,7 +28,9 @@ def get_admin(nombre):
     cursor.execute('select 1 from usuario where autorizado = true and nombre = %s and administrador = true;', (nombre, ))
     verification = cursor.fetchone()
 
-    return verification[0] == 1
+    if verification is None:
+        return False
+    return True
 
 
 

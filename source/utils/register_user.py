@@ -5,15 +5,13 @@ import os
 from source.utils.config import camera_source as cm
 from source.utils.connection import connect
 
-def register_user(nombre):
+def register_user(nombre, administrador):
     connection = connect()
     cursor = connection.cursor()
     cursor.execute('insert into usuario(nombre) values (%s) returning id_usuario;', (nombre, ))
 
     id_usuario = cursor.fetchone()[0]
     print('id usuario:', id_usuario)
-
-    connection.commit()
 
     user_folder = f'storage/users/{id_usuario}'
     os.makedirs(user_folder, exist_ok = True)
@@ -58,6 +56,10 @@ def register_user(nombre):
 
             np.save(f'{user_folder}/encoding.npy', encoding)
             print('Usuario registrado correctamente')
+
+            if administrador:
+                cursor.execute('update usuario set administrador = true where id_usuario = %s', (id_usuario, ))
+            connection.commit()
             return True
         
         cv2.imshow("Register user", display_frame)

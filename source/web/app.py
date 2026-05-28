@@ -104,7 +104,8 @@ def register_user():
     if not session.get("authenticated"):
         return redirect("/login")
 
-    nombre = request.form["nombre"]
+    nombre = request.form.get('nombre')
+    administrador = request.form.get('administrador')
     connection = connect()
     cursor = connection.cursor()
 
@@ -125,7 +126,9 @@ def register_user():
         connection.close()
         return redirect("/register")
 
-    respuesta = ru(nombre)
+    administrador = administrador == 'true'
+
+    respuesta = ru(nombre, administrador)
 
     if respuesta:
         print("Usuario guardado en BD")
