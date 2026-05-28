@@ -7,6 +7,7 @@
     <h1>
         Usuarios Registrados
     </h1>
+
     <table border="1">
         <tr>
             <th>ID</th>
@@ -14,6 +15,7 @@
             <th>Autorizado</th>
             <th>Perm. de admin.</th>
             <th>Fecha de registro</th>
+            <th>Acciones</th>
         </tr>
         {% for usuario in usuarios %}
         <tr>
@@ -22,6 +24,27 @@
             <td>{{ usuario[2] }}</td>
             <td>{{ usuario[3] }}</td>
             <td>{{ usuario[4] }}</td>
+            <td>
+                {% if usuario[2] %}
+                <form 
+                action="/deactivate_user/{{ usuario[0] }}" 
+                method="POST" 
+                onsubmit="return confirm('¿Seguro que deseas restringir el acceso al usuario {{usuario[1]}}?');">
+                    <button type="submit">
+                        Restringir acceso
+                    </button>
+                </form>
+                {% else %}
+                <form 
+                action="/activate_user/{{ usuario[0] }}" 
+                method="POST" 
+                onsubmit="return confirm('¿Seguro que deseas reactivar el acceso al usuario {{usuario[1]}}?');">
+                    <button type="submit">
+                        Reactivar acceso
+                    </button>
+                </form>
+                {%endif%}
+            </td>
         </tr>
         {% endfor %}
     </table>

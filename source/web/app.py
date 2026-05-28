@@ -1,5 +1,5 @@
 import os
-from flask import (Flask, render_template, request, redirect, session)
+from flask import (Flask, render_template, request, redirect, session, url_for)
 from source.utils.connection import connect
 from source.utils.recognize import recognize
 from source.utils.load_users import load_user, get_admin
@@ -15,12 +15,9 @@ app.secret_key = "safe_face_secret"
 def login():
     return render_template("login.html")
 
-
 @app.route("/login_face", methods=["POST"])
 def login_face():
-
     nombre = request.form["nombre"]
-
     respuesta = get_admin(nombre)
 
     if respuesta == False:
@@ -36,8 +33,6 @@ def login_face():
         return redirect("/")
     else:
         return redirect("/login")
-
-
 
 @app.route("/logout")
 def logout():
@@ -63,9 +58,7 @@ def home():
 
 @app.route("/users")
 def users():
-
     if not session.get("authenticated"):
-
         return redirect("/login")
 
     print("Users")
@@ -75,27 +68,42 @@ def users():
 
     cursor.execute(
         """
-        select id_usuario, nombre, autorizado, administrador, fecha_registro::date
-        from usuario
-        order by id_usuario
-        """
-    )
+            select id_usuario, nombre, autorizado, administrador, fecha_registro::date
+            from usuario
+            order by id_usuario
+            """
+        )
 
     usuarios = cursor.fetchall()
-
     cursor.close()
     connection.close()
 
     return render_template(
         "users.html",
         usuarios = usuarios
-    )
+        )
+
+@app.route('/deactivate_user/<int:id_usuario>', methods=['POST'])
+def desactivar_usuario(id_usuario):
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("update usuario set autorizado = false where id_usuario = %s", (id_usuario,))
+    connection.commit()
+
+    return redirect(url_for('users'))
+
+@app.route('/activate_user/<int:id_usuario>', methods=['POST'])
+def activar_usuario(id_usuario):
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("update usuario set autorizado = true where id_usuario = %s", (id_usuario,))
+    connection.commit()
+    return redirect(url_for('users'))
 
 @app.route("/register")
 def register():
     if not session.get("authenticated"):
         return redirect("/login")
-
     return render_template("register.html")
 
 
@@ -110,16 +118,15 @@ def register_user():
     cursor = connection.cursor()
 
     cursor.execute(
-        """
-        SELECT *
-        FROM usuario
-        WHERE nombre = %s
-        """,
-        (nombre, )
-    )
+            """
+            SELECT *
+            FROM usuario
+            WHERE nombre = %s
+            """,
+            (nombre, )
+        )
 
     existing_user = cursor.fetchone()
-
     if existing_user:
         print("Usuario ya existe")
         cursor.close()
@@ -141,19 +148,18 @@ def register_user():
 def logs():
     if not session.get("authenticated"):
         return redirect("/login")
-
     connection = connect()
     cursor = connection.cursor()
 
     cursor.execute(
-        """
-        select a.id_acceso, u.nombre, a.autorizado, a.fecha::date, to_char(a.fecha::time, 'HH24:MI:SS'), 
-        concat(to_char(((1 - a.confianza) * 100), 'FM999.99'), '%')
-        from acceso a
-        left join usuario u on a.id_usuario = u.id_usuario
-        order by a.fecha desc
-        """
-    )
+            """
+            select a.id_acceso, u.nombre, a.autorizado, a.fecha::date, to_char(a.fecha::time, 'HH24:MI:SS'), 
+            concat(to_char(((1 - a.confianza) * 100), 'FM999.99'), '%')
+            from acceso a
+            left join usuario u on a.id_usuario = u.id_usuario
+            order by a.fecha desc
+            """
+        )
 
     logs = cursor.fetchall()
 
@@ -161,9 +167,9 @@ def logs():
     connection.close()
 
     return render_template(
-        "logs.html",
-        logs = logs
-    )
+            "logs.html",
+            logs = logs
+        )
 
 
 if __name__ == "__main__":
