@@ -84,7 +84,7 @@ def users():
         )
 
 @app.route('/deactivate_user/<int:id_usuario>', methods=['POST'])
-def desactivar_usuario(id_usuario):
+def desactivate_usuario(id_usuario):
     connection = connect()
     cursor = connection.cursor()
     cursor.execute("update usuario set autorizado = false where id_usuario = %s", (id_usuario,))
@@ -93,10 +93,18 @@ def desactivar_usuario(id_usuario):
     return redirect(url_for('users'))
 
 @app.route('/activate_user/<int:id_usuario>', methods=['POST'])
-def activar_usuario(id_usuario):
+def activate_usuario(id_usuario):
     connection = connect()
     cursor = connection.cursor()
     cursor.execute("update usuario set autorizado = true where id_usuario = %s", (id_usuario,))
+    connection.commit()
+    return redirect(url_for('users'))
+
+@app.route('/revoke_admin/<int:id_usuario>', methods=['POST'])
+def revoke_admin(id_usuario):
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("update usuario set administrador = false where id_usuario = %s", (id_usuario,))
     connection.commit()
     return redirect(url_for('users'))
 

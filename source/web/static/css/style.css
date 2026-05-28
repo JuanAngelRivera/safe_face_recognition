@@ -134,6 +134,19 @@ body {
     color: white;
 }
 
+.btn-danger:enabled {
+    background-color: var(--danger-color);
+}
+
+.btn-danger:disabled {
+    background-color: black;
+    cursor: default;
+}
+
+.btn-danger:disabled:hover {
+    background-color: black;
+}
+
 .btn-danger:hover {
     background-color: #dc2626;
 }
