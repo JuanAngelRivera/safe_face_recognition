@@ -14,10 +14,11 @@ def load_user(nombre):
 
     if os.path.exists(encoding_path):
         encoding = np.load(encoding_path)
+    else:
+        return None, id_usuario
 
     if encoding is None:
         print('No se encontró el encoding')
-        exit()
 
     return encoding, id_usuario
 

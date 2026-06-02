@@ -1,12 +1,11 @@
 import os
-from flask import (Flask, render_template, request, redirect, session, url_for)
+from flask import (Flask, render_template, request, redirect, session, url_for, Response, flash)
 from source.utils.connection import connect
 from source.utils.recognize import recognize
 from source.utils.load_users import load_user, get_admin
 from source.utils.register_user import register_user as ru
-# Agregar al inicio
-from flask import Response
 from source.utils.video_stream import generate_stream, start_camera, stop_camera 
+from source.utils.save_log import save_log
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,13 +33,15 @@ def login_face():
 
     if respuesta == False:
         print('El usuario no es administrador')
+        flash('Usted no tiene permiso de administrador.\nEl incidente será registrado.', 'danger')
+        save_log(None, False, 99)
         return redirect("/login")
 
     encoding, id = load_user(nombre)
     
-    
     if encoding is None:
         print('Usuario sin encoding')
+        flash('No se encontró tu información.\nContacta con el administrador.', 'info')
         return redirect("/login")
     
     # Aquí se hace el reconocimiento con ventana OpenCV
@@ -52,6 +53,7 @@ def login_face():
         session.pop("pending_verification", None)
         return redirect("/")
     else:
+        flash('No pudimos confirmar tu rostro.\nIntenta de nuevo.','danger')
         return redirect("/login")
 
 @app.route("/logout")
@@ -168,9 +170,11 @@ def register_user():
 
     if respuesta:
         print("Usuario guardado en BD")
+        flash(f"Usuario: {nombre} {'/ con permisos de administrador' if administrador else ''} registrado correctamente", 'success')
         return redirect("/users")
     else:
         print('No se pudo registrar el usuario')
+        flash('No se pudo registrar al usuario.', 'danger')
         return redirect('/register')
 
 @app.route("/logs")

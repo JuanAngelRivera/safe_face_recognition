@@ -1,92 +1,101 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Verificación Facial</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        .video-preview {
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
-        .video-preview img {
-            width: 100%;
-            display: block;
-            background: #000;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Título centrado -->
-        <div class="page-header">
-            <div class="header-icon header-icon-success">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <path d="M9 12l2 2 4-4"/>
-                </svg>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Verificación Facial</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <style>
+            .video-preview {
+                border-radius: 8px;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
+            }
+            .video-preview img {
+                width: 100%;
+                display: block;
+                background: #000;
+            }
+        </style>
+    </head>
+    <body>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
             </div>
-            <h1 class="main-title">Verificación Facial</h1>
-            <p class="subtitle">Ingresa tu nombre para verificar tu identidad</p>
-        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+        <div class="container">
+            <!-- Título centrado -->
+            <div class="page-header">
+                <div class="header-icon header-icon-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+                <h1 class="main-title">Verificación Facial</h1>
+                <p class="subtitle">Ingresa tu nombre para verificar tu identidad</p>
+            </div>
 
-        <!-- Formulario centrado -->
-        <div class="form-card">
-            <form action="/login_face" method="POST" class="form">
-                <!-- Vista previa de cámara -->
-                <div class="form-group">
-                    <label for="video">Vista Previa de Cámara</label>
-                    <div class="video-preview">
-                        <img src="{{ url_for('video_feed') }}" alt="Camera">
+            <!-- Formulario centrado -->
+            <div class="form-card">
+                <form action="/login_face" method="POST" class="form">
+                    <!-- Vista previa de cámara -->
+                    <div class="form-group">
+                        <label for="video">Vista Previa de Cámara</label>
+                        <div class="video-preview">
+                            <img src="{{ url_for('video_feed') }}" alt="Camera">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="nombre">Nombre de Usuario</label>
-                    <div class="input-with-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                        <input 
-                            type="text" 
-                            id="nombre"
-                            name="nombre" 
-                            placeholder="Ingresa tu nombre de usuario"
-                            required
-                            class="form-input icon-input"
-                        >
+                    <div class="form-group">
+                        <label for="nombre">Nombre de Usuario</label>
+                        <div class="input-with-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <input 
+                                type="text" 
+                                id="nombre"
+                                name="nombre" 
+                                placeholder="Ingresa tu nombre de usuario"
+                                required
+                                class="form-input icon-input"
+                            >
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success btn-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            <path d="M9 12l2 2 4-4"/>
-                        </svg>
-                        Verificar Identidad
-                    </button>
-                </div>
-            </form>
-        </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success btn-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                            Verificar Identidad
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-        <!-- Alerta informativa -->
-        <div class="info-alert">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12.01" y2="8"/>
-            </svg>
-            <p>El sistema verificará tu identidad mediante reconocimiento facial</p>
-        </div>
+            <!-- Alerta informativa -->
+            <div class="info-alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <p>El sistema verificará tu identidad mediante reconocimiento facial</p>
+            </div>
 
-        <!-- Botón volver -->
-        <div class="text-center mt-3">
-            <a href="/" class="btn btn-secondary">
-                ← Cancelar
-            </a>
+            <!-- Botón volver -->
+            <div class="text-center mt-3">
+                <a href="/" class="btn btn-secondary">
+                    ← Cancelar
+                </a>
+            </div>
         </div>
-    </div>
-</body>
-</html>
+    </body>
+    </html>
