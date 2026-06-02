@@ -4,6 +4,9 @@ from source.utils.connection import connect
 from source.utils.recognize import recognize
 from source.utils.load_users import load_user, get_admin
 from source.utils.register_user import register_user as ru
+# Agregar al inicio
+from flask import Response
+from source.utils.video_stream import generate_stream, start_camera, stop_camera 
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -11,8 +14,17 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask( __name__, template_folder=os.path.join(BASE_DIR, "templates"))
 app.secret_key = "safe_face_secret"
 
+# Agregar esta ruta
+@app.route('/video_feed')
+def video_feed():
+    return Response(
+        generate_stream(),
+        mimetype='multipart/x-mixed-replace; boundary=frame'
+    )
+    
 @app.route("/login")
 def login():
+    start_camera()  # Iniciar cámara al mostrar login
     return render_template("login.html")
 
 @app.route("/login_face", methods=["POST"])
@@ -25,18 +37,26 @@ def login_face():
         return redirect("/login")
 
     encoding, id = load_user(nombre)
+    
+    
+    if encoding is None:
+        print('Usuario sin encoding')
+        return redirect("/login")
+    
+    # Aquí se hace el reconocimiento con ventana OpenCV
     resultado = recognize(encoding, id)
 
     if resultado:
         session["authenticated"] = True
         session["usuario"] = nombre
+        session.pop("pending_verification", None)
         return redirect("/")
     else:
         return redirect("/login")
 
 @app.route("/logout")
 def logout():
-
+    stop_camera()  # Detener cámara al cerrar sesión
     session.clear()
 
     return redirect("/login")

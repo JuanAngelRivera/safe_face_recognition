@@ -114,6 +114,7 @@ threading.Thread(
     daemon = True
 ).start()
 
+
 while True:
     with frame_lock:
         if latest_frame is None:
@@ -124,7 +125,7 @@ while True:
     with faces_lock:
         for face in tracked_faces:
             cv2.rectangle(
-                display_frame, 
+                display_frame,
                 (face['left'], face['top']),
                 (face['right'], face['bottom']),
                 face['color'],
@@ -132,7 +133,7 @@ while True:
             )
 
             cv2.putText(
-                display_frame, 
+                display_frame,
                 f"{face['label']} {face['distance']:.2f}",
                 (face['left'], face['top'] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX,

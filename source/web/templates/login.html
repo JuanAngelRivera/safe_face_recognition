@@ -3,6 +3,18 @@
 <head>
     <title>Verificación Facial</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .video-preview {
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .video-preview img {
+            width: 100%;
+            display: block;
+            background: #000;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,6 +33,14 @@
         <!-- Formulario centrado -->
         <div class="form-card">
             <form action="/login_face" method="POST" class="form">
+                <!-- Vista previa de cámara -->
+                <div class="form-group">
+                    <label for="video">Vista Previa de Cámara</label>
+                    <div class="video-preview">
+                        <img src="{{ url_for('video_feed') }}" alt="Camera">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="nombre">Nombre de Usuario</label>
                     <div class="input-with-icon">
