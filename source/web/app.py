@@ -170,7 +170,7 @@ def register_user():
 
     if respuesta:
         print("Usuario guardado en BD")
-        flash(f"Usuario: {nombre} {'/ con permisos de administrador' if administrador else ''} registrado correctamente", 'success')
+        flash(f"Usuario: {nombre} {'con permisos de administrador' if administrador else ''} registrado correctamente", 'success')
         return redirect("/users")
     else:
         print('No se pudo registrar el usuario')

@@ -3,6 +3,22 @@
 <head>
     <title>Usuarios</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const alerts = document.querySelectorAll(".alert");
+
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = "0";
+                    alert.style.transform = "translateY(-10px)";
+
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
