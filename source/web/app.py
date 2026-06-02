@@ -132,6 +132,7 @@ def revoke_admin(id_usuario):
 def register():
     if not session.get("authenticated"):
         return redirect("/login")
+    start_camera()  # Iniciar cámara al mostrar registro
     return render_template("register.html")
 
 
